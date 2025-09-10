@@ -14,7 +14,7 @@ const client = new Client()
   .setProject(appwriteConfig.projectId)
 
 const account = new Account(client);
-const database= new Databases(client);
+const database = new Databases(client);
 const storage = new Storage(client);
 
 export { client, account, database, storage }
