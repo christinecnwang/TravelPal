@@ -91,7 +91,12 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formData,
+          country: formData.country,
+          numberOfDays: formData.duration,
+          travelStyle: formData.travelStyle,
+          interests: formData.interest,
+          budget: formData.budget,
+          groupType: formData.groupType,
           userId: user.$id,
         }),
       });
