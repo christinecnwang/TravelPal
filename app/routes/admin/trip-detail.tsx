@@ -8,12 +8,13 @@ import {
 } from "@syncfusion/ej2-react-buttons/src/chips/chips-directive";
 import { ChipListComponent } from "@syncfusion/ej2-react-buttons/src/chips/chiplist.component";
 
-type TripDetailLoaderData = {
+export type TripDetailLoaderData = {
   trip: {
     tripDetails: string;
     imageUrls: string[];
   };
   allTrips: Trip[];
+  total: number;
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
