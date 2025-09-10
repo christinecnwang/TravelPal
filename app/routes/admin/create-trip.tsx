@@ -23,7 +23,8 @@ export const loader = async () => {
         value: country.name.common,
         cca2: country.cca2,
         openStreetMap: country.maps?.openStreetMap,
-    }));
+    })).sort((a: any, b: any) => a.name.localeCompare(b.name));
+
 };
 
 const countryTemplate = (data: any) => (
