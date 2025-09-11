@@ -7,23 +7,17 @@ import { getExistingUser, storeUserData } from "~/appwrite/auth";
 
 export async function clientLoader({ request }: { request: Request }) {
   try {
-    const url = new URL(request.url)
-    const user = await account.get();
+    const url = new URL(request.url);
 
+    const publicPages = ["/explore", "/trips"];
+    if (publicPages.some((page) => url.pathname.startsWith(page))) {
+      return null;
+    }
+
+    const user = await account.get();
     if (!user.$id) return redirect("/sign-in");
 
     const existingUser = await getExistingUser(user.$id);
-
-    if (existingUser?.status === "user") {
-      if (url.pathname.startsWith("/trips")) {
-        return existingUser
-      }
-      return redirect("/");
-    }
-
-    if (existingUser?.status === "admin") {
-      return existingUser
-    }
 
     return existingUser?.$id ? existingUser : await storeUserData();
   } catch (error) {
