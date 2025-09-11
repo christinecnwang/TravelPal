@@ -37,8 +37,14 @@ export function parseTripData(jsonString: string): Trip | null {
   }
 }
 
-export function getFirstWord(input: string = ""): string {
-  return input.trim().split(/\s+/)[0] || "";
+export function getFirstWord(input: unknown): string {
+  if (typeof input !== "string") {
+    if (input === null || input === undefined) {
+      return "";
+    }
+    input = String(input);
+  }
+  return (input as string).trim().split(/\s+/)[0] || "";
 }
 
 export const calculateTrendPercentage = (

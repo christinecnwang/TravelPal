@@ -50,7 +50,25 @@ const countryTemplate = (data: any) => (
   </span>
 );
 
-const CreateTrips = ({ loaderData }: Route.ComponentProps) => {
+const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
+  const countries = loaderData as Country[];
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState<TripFormData>({
+    country: countries[0]?.name || "",
+    travelStyle: "",
+    interest: "",
+    budget: "",
+    duration: 0,
+    groupType: "",
+  });
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (key: keyof TripFormData, value: string | number) => {
+    setFormData({ ...formData, [key]: value });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -78,8 +96,23 @@ const CreateTrips = ({ loaderData }: Route.ComponentProps) => {
     }
 
     try {
-      console.log("user", user);
-      console.log("formData", formData);
+      const response = await fetch("/api/create-trip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          country: formData.country,
+          numberOfDays: formData.duration,
+          travelStyle: formData.travelStyle,
+          interests: formData.interest,
+          budget: formData.budget,
+          groupType: formData.groupType,
+          userId: user.$id,
+        }),
+      });
+
+      const result: CreateTripResponse = await response.json();
+      if (result?.id) navigate(`/trips/${result.id}`);
+      else console.error("Failed to generate a trip");
     } catch (e) {
       console.error("Error generating trip", e);
     } finally {
@@ -87,28 +120,11 @@ const CreateTrips = ({ loaderData }: Route.ComponentProps) => {
     }
   };
 
-  const handleChange = (key: keyof TripFormData, value: string | number) => {
-    setFormData({ ...formData, [key]: value });
-  };
-  const countries = loaderData as Country[];
-
   const countryData = countries.map((country: any) => ({
     text: country.name,
     value: country.value,
     cca2: country.cca2,
   }));
-
-  const [formData, setFormData] = useState<TripFormData>({
-    country: countries[0]?.name || "",
-    travelStyle: "",
-    interest: "",
-    budget: "",
-    duration: 0,
-    groupType: "",
-  });
-
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const mapData = [
     {
@@ -245,4 +261,4 @@ const CreateTrips = ({ loaderData }: Route.ComponentProps) => {
   );
 };
 
-export default CreateTrips;
+export default CreateTrip;
