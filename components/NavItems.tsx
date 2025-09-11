@@ -20,12 +20,16 @@ const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
       </Link>
       <div className='container'>
         <nav>
-          {sidebarItems.filter((item) => {
-            if (user?.status !== "admin" && (item.href === "/dashboard" || item.href === "/all-users")) {
-              return false
-            }
-            return true;
-          })
+          {sidebarItems
+            .filter((item) => {
+              if (
+                user?.status !== "admin" &&
+                (item.href === "/dashboard" || item.href === "/all-users")
+              ) {
+                return false;
+              }
+              return true;
+            })
             .map(({ id, href, icon, label }) => (
               <NavLink to={href} key={id}>
                 {({ isActive }: { isActive: boolean }) => (

@@ -57,9 +57,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       "day": 1,
       "location": "City/Region Name",
       "activities": [
-        {"time": "Morning", "description": "🏰 (add an emoji at the beginning of each activity description if possible) Visit the local historic castle and enjoy a scenic walk"},
-        {"time": "Afternoon", "description": "🖼️ (add an emoji at the beginning of each activity description if possible) Explore a famous art museum with a guided tour"},
-        {"time": "Evening", "description": "🍷 (add an emoji at the beginning of each activity description if possible) Dine at a rooftop restaurant with local wine"}
+        {"time": "Morning", "description": "🏰 (add an emoji at the beginning of each activity description if possible, do not include this instruction text in the result) Visit the local historic castle and enjoy a scenic walk"},
+        {"time": "Afternoon", "description": "🖼️ Explore a famous art museum with a guided tour"},
+        {"time": "Evening", "description": "🍷 Dine at a rooftop restaurant with local wine"}
       ]
     },
     ...

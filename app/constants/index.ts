@@ -17,6 +17,12 @@ export const sidebarItems = [
   {
     id: 4,
     icon: "/assets/icons/itinerary.svg",
+    label: "Explore",
+    href: "/explore",
+  },
+  {
+    id: 5,
+    icon: "/assets/icons/itinerary.svg",
     label: "My Trips",
     href: "/trips",
   },
