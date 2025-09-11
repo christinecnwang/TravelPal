@@ -10,4 +10,5 @@ export default [
     route("trips/create", "routes/admin/create-trip.tsx"),
     route("trips/:tripId", "routes/admin/trip-detail.tsx"),
   ]),
+  route("/", "routes/root/index.tsx"),
 ] satisfies RouteConfig;
