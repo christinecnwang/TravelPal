@@ -263,12 +263,12 @@ const TripDetail = () => {
             onClick={cancelDelete}
           >
             <div
-              className='bg-white rounded-lg shadow-lg p-6 w-full max-w-sm flex flex-col items-center'
+              className='bg-white rounded-lg shadow-lg p-6 w-full max-w-md h-[180px] flex flex-col items-center justify-center'
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className='text-lg font-semibold mb-4 text-center'>
-                Are you sure you want to delete this trip? This action cannot be
-                undone.
+                Are you sure you want to delete this trip? <br />
+                This action cannot be undone.
               </h2>
               <div className='flex gap-4 w-full justify-center'>
                 <ButtonComponent
