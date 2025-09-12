@@ -2,12 +2,17 @@ import { ID, OAuthProvider, Query } from "appwrite";
 import { account, appwriteConfig, database } from "~/appwrite/client";
 import { redirect } from "react-router";
 
-export const getAllUsers = async (limit: number, offset: number) => {
+export const getAllUsers = async (limit?: number, offset: number = 0) => {
   try {
+    const queries = [Query.offset(offset)];
+    if (limit) {
+      queries.push(Query.limit(limit));
+    }
+
     const { documents: users, total } = await database.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.usersTableId,
-      [Query.limit(limit), Query.offset(offset)]
+      queries
     );
 
     if (total === 0) return { users: [], total };

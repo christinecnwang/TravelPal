@@ -15,7 +15,7 @@ import { PagerComponent } from "@syncfusion/ej2-react-grids/src/pager/pager.comp
 const PAGE_LIMIT = 8;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { allTrips } = await getAllTrips(1000, 0);
+  const { allTrips } = await getAllTrips();
 
   return {
     allTrips: allTrips.map(({ $id, tripDetails, imageUrls, userId }) => ({

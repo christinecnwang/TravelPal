@@ -1,19 +1,26 @@
 import { appwriteConfig, database } from "./client";
 import { Query } from "appwrite";
 
-export const getAllTrips = async (limit: number, offset: number) => {
-  const allTrips = await database.listDocuments(
-    appwriteConfig.databaseId,
-    appwriteConfig.tripsTableId,
-    [Query.limit(limit), Query.offset(offset), Query.orderDesc("$createdAt")]
-  );
+export const getAllTrips = async (limit?: number, offset: number = 0) => {
+  try {
+    const queries = [Query.offset(offset)];
+    if (limit) {
+      queries.push(Query.limit(limit));
+    }
 
-  if (allTrips.total === 0) {
-    console.error("No trips found");
+    const { documents: trips, total } = await database.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.tripsTableId,
+      queries
+    );
+
+    if (total === 0) return { allTrips: [], total };
+
+    return { allTrips: trips, total };
+  } catch (error) {
+    console.log("Error fetching trips:", error);
     return { allTrips: [], total: 0 };
   }
-
-  return { allTrips: allTrips.documents, total: allTrips.total };
 };
 
 export const getTripById = async (tripId: string) => {
