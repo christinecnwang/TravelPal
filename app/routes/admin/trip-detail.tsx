@@ -1,5 +1,5 @@
-import { useLoaderData, type LoaderFunctionArgs } from "react-router";
-import { getAllTrips, getTripById } from "~/appwrite/trips";
+import { useLoaderData, useNavigate, type LoaderFunctionArgs } from "react-router";
+import { deleteTrip, getAllTrips, getTripById } from "~/appwrite/trips";
 import { cn, getFirstWord, parseTripData } from "lib/utils";
 import { Header, InfoPill, TripCard } from "components";
 import {
@@ -7,13 +7,16 @@ import {
   ChipsDirective,
 } from "@syncfusion/ej2-react-buttons/src/chips/chips-directive";
 import { ChipListComponent } from "@syncfusion/ej2-react-buttons/src/chips/chiplist.component";
+import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 
 export type TripDetailLoaderData = {
   trip: {
     tripDetails: string;
     imageUrls: string[];
+    $id: string;
   };
   allTrips: Trip[];
+  allTripsForPopular: Trip[];
   total: number;
 };
 
@@ -44,7 +47,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     .filter(Boolean);
 
   return {
-    trip,
+    trip: { ...trip, $id: tripId },
     allTrips: parsedTrips,
   };
 };
@@ -67,6 +70,23 @@ const TripDetail = () => {
     weatherInfo,
     country,
   } = tripData || {};
+
+  const navigate = useNavigate();
+  const tripId = loaderData?.trip?.$id
+
+  const handleDelete = async () => {
+    if (!tripId) return;
+    const confirmDelete = window.confirm("Are you sure you want to delete this trip?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteTrip(tripId);
+      navigate(-1); // go back to the previous page
+    } catch (error) {
+      console.error("Failed to delete trip", error);
+      alert("Something went wrong. Could not delete the trip.");
+    }
+  };
 
   const allTrips = (loaderData?.allTrips as Trip[]) || [];
 
@@ -215,32 +235,13 @@ const TripDetail = () => {
             </div>
           </section>
         ))}
-      </section>
-
-      <section className='flex flex-col gap-6'>
-        <h2 className='p-24-semibold text-dark-100'>Popular Trips</h2>
-        <div className='trip-grid'>
-          {allTrips.map(
-            ({
-              id,
-              name,
-              imageUrls,
-              itinerary,
-              interests,
-              travelStyle,
-              estimatedPrice,
-            }) => (
-              <TripCard
-                id={id}
-                key={id}
-                name={name}
-                location={itinerary?.[0]?.location ?? ""}
-                imageUrl={imageUrls[0]}
-                tags={[interests, travelStyle]}
-                price={estimatedPrice}
-              />
-            )
-          )}
+        <div >
+          <ButtonComponent
+            cssClass="e-danger"
+            onClick={handleDelete}
+          >
+            Delete Trip
+          </ButtonComponent>
         </div>
       </section>
     </main>

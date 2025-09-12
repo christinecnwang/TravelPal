@@ -30,3 +30,17 @@ export const getTripById = async (tripId: string) => {
 
   return trip;
 };
+
+export const deleteTrip = async (tripId: string) => {
+  try {
+    await database.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.tripsTableId,
+      tripId
+    );
+    return true;
+  } catch (error) {
+    console.log("Error deleting trip:", error);
+    throw error;
+  }
+};
