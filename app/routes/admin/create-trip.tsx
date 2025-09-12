@@ -2,7 +2,7 @@ import { Header } from "components";
 import { ComboBoxComponent } from "@syncfusion/ej2-react-dropdowns";
 import type { Route } from "./+types/create-trip";
 import CountryFlag from "react-country-flag";
-import { comboBoxItems, selectItems } from "~/constants";
+import { comboBoxItems, selectItems, statesByCountry } from "~/constants";
 import { cn, formatKey } from "lib/utils";
 import {
   LayerDirective,
@@ -55,18 +55,29 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<TripFormData>({
-    country: countries[0]?.name || "",
+    country: "",
     travelStyle: "",
     interest: "",
     budget: "",
     duration: 0,
     groupType: "",
   });
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (key: keyof TripFormData, value: string | number) => {
     setFormData({ ...formData, [key]: value });
+  };
+
+  const handleCountryChange = (value: string) => {
+    setSelectedCountry(value);
+
+    if (value !== "United States") {
+      handleChange("country", value);
+    } else {
+      handleChange("country", "");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -128,35 +139,36 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
 
   const mapData = [
     {
-      country: formData.country,
+      country: selectedCountry === "United States" && formData.country
+        ? "United States"
+        : formData.country,
       color: "#EA382E",
       coordinates:
-        countries.find((c: Country) => c.name === formData.country)
+        countries.find((c: Country) => c.name === (selectedCountry === "United States" && formData.country ? "United States" : formData.country))
           ?.coordinates || [],
     },
   ];
 
   return (
-    <main className='flex flex-col gap-10 pb-20 wrapper'>
+    <main className="flex flex-col gap-10 pb-20 wrapper">
       <Header
-        title='Add a New Trip'
-        description='View and edit AI Generated travel plans'
+        title="Add a New Trip"
+        description="View and edit AI Generated travel plans"
       />
-      <section className='mt-2.5 wrapper=md'>
-        <form className='trip-form' onSubmit={handleSubmit}>
+      <section className="mt-2.5 wrapper=md">
+        <form className="trip-form" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor='country'>Country</label>
+            <label htmlFor="country">Country</label>
             <ComboBoxComponent
-              id='country'
+              id="country"
               dataSource={countryData}
               fields={{ text: "text", value: "value" }}
-              placeholder='Select a Country'
+              placeholder="Select a Country"
               itemTemplate={countryTemplate}
-              className='combo-box'
+              className="combo-box"
+              value={selectedCountry} // bind value here
               change={(e: { value: string | undefined }) => {
-                if (e.value) {
-                  handleChange("country", e.value);
-                }
+                if (e.value) handleCountryChange(e.value);
               }}
               allowFiltering
               filtering={(e) => {
@@ -175,16 +187,38 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
               }}
             />
           </div>
+
+          {/* Render state dropdown only if USA is selected */}
+          {selectedCountry === "United States" && (
+            <div>
+              <label htmlFor="state">State</label>
+              <ComboBoxComponent
+                id="state"
+                dataSource={statesByCountry.USA.map((s) => ({
+                  text: s.name,
+                  value: s.name,
+                }))}
+                fields={{ text: "text", value: "value" }}
+                placeholder="Select a State"
+                className="combo-box"
+                change={(e: { value: string | undefined }) => {
+                  if (e.value) handleChange("country", e.value);
+                }}
+              />
+            </div>
+          )}
+
           <div>
-            <label htmlFor='duration'> Duration</label>
+            <label htmlFor="duration"> Duration</label>
             <input
-              id='duration'
-              name='duration'
-              placeholder='Enter a number of days (5,12 ...)'
-              className='form-input placeholder:text-gray-100'
+              id="duration"
+              name="duration"
+              placeholder="Enter a number of days (5,12 ...)"
+              className="form-input placeholder:text-gray-100"
               onChange={(e) => handleChange("duration", Number(e.target.value))}
             />
           </div>
+
           {selectItems.map((key) => (
             <div key={key}>
               <label htmlFor={key}>{formatKey(key)}</label>
@@ -197,9 +231,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
                 fields={{ text: "text", value: "value" }}
                 placeholder={`Select ${formatKey(key)}`}
                 change={(e: { value: string | undefined }) => {
-                  if (e.value) {
-                    handleChange(key, e.value);
-                  }
+                  if (e.value) handleChange(key, e.value);
                 }}
                 allowFiltering
                 filtering={(e) => {
@@ -216,42 +248,45 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
                       }))
                   );
                 }}
-                className='combo-box'
+                className="combo-box"
               />
             </div>
           ))}
+
           <div>
-            <label htmlFor='location'>Location on the world map</label>
+            <label htmlFor="location">Location on the world map</label>
             <MapsComponent>
               <LayersDirective>
                 <LayerDirective
                   shapeData={world_map}
                   dataSource={mapData}
-                  shapePropertyPath='name'
-                  shapeDataPath='country'
+                  shapePropertyPath="name"
+                  shapeDataPath="country"
                   shapeSettings={{ colorValuePath: "color", fill: "#E5E5E5" }}
                 />
               </LayersDirective>
             </MapsComponent>
           </div>
-          <div className='bg-gray-200 h-px w-full' />
+
+          <div className="bg-gray-200 h-px w-full" />
 
           {error && (
-            <div className='error'>
+            <div className="error">
               <p>{error}</p>
             </div>
           )}
-          <footer className='px-6 w-full'>
+
+          <footer className="px-6 w-full">
             <ButtonComponent
-              type='submit'
-              className='button-class !h-12 !w-full'
+              type="submit"
+              className="button-class !h-12 !w-full"
               disabled={loading}
             >
               <img
                 src={`/assets/icons/${loading ? "loader.svg" : "magic-star.svg"}`}
                 className={cn("size-5", { "animate-spin": loading })}
               />
-              <span className='p-16-semibold text-white'>
+              <span className="p-16-semibold text-white">
                 {loading ? "Generating..." : "Generate Trip"}
               </span>
             </ButtonComponent>
