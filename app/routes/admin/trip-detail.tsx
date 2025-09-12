@@ -1,4 +1,8 @@
-import { useLoaderData, useNavigate, type LoaderFunctionArgs } from "react-router";
+import {
+  useLoaderData,
+  useNavigate,
+  type LoaderFunctionArgs,
+} from "react-router";
 import { deleteTrip, getAllTrips, getTripById } from "~/appwrite/trips";
 import { cn, getFirstWord, parseTripData } from "lib/utils";
 import { Header, InfoPill, TripCard } from "components";
@@ -8,6 +12,7 @@ import {
 } from "@syncfusion/ej2-react-buttons/src/chips/chips-directive";
 import { ChipListComponent } from "@syncfusion/ej2-react-buttons/src/chips/chiplist.component";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
+import { useState } from "react";
 
 export type TripDetailLoaderData = {
   trip: {
@@ -72,20 +77,29 @@ const TripDetail = () => {
   } = tripData || {};
 
   const navigate = useNavigate();
-  const tripId = loaderData?.trip?.$id
+  const tripId = loaderData?.trip?.$id;
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleDelete = async () => {
     if (!tripId) return;
-    const confirmDelete = window.confirm("Are you sure you want to delete this trip?");
-    if (!confirmDelete) return;
+    setShowModal(true);
+  };
 
+  const confirmDelete = async () => {
+    if (!tripId) return;
     try {
       await deleteTrip(tripId);
-      navigate(-1); // go back to the previous page
+      navigate(-1); // Go back to the previous page
     } catch (error) {
       console.error("Failed to delete trip", error);
       alert("Something went wrong. Could not delete the trip.");
     }
+    setShowModal(false);
+  };
+
+  const cancelDelete = () => {
+    setShowModal(false);
   };
 
   const allTrips = (loaderData?.allTrips as Trip[]) || [];
@@ -235,14 +249,46 @@ const TripDetail = () => {
             </div>
           </section>
         ))}
-        <div >
+        <div>
           <ButtonComponent
-            cssClass="e-danger"
+            cssClass='e-danger w-full !h-11 md:!w-[115px] mt-4'
             onClick={handleDelete}
           >
             Delete Trip
           </ButtonComponent>
         </div>
+        {showModal && (
+          <div
+            className='fixed inset-0 z-50 flex items-center justify-center bg-black/30'
+            onClick={cancelDelete}
+          >
+            <div
+              className='bg-white rounded-lg shadow-lg p-6 w-full max-w-sm flex flex-col items-center'
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className='text-lg font-semibold mb-4 text-center'>
+                Are you sure you want to delete this trip? This action cannot be
+                undone.
+              </h2>
+              <div className='flex gap-4 w-full justify-center'>
+                <ButtonComponent
+                  type='button'
+                  cssClass='!h-10 !w-24 bg-gray-200 text-gray-800 hover:bg-gray-300'
+                  onClick={cancelDelete}
+                >
+                  Cancel
+                </ButtonComponent>
+                <ButtonComponent
+                  type='button'
+                  cssClass='e-danger !h-10 !w-24'
+                  onClick={confirmDelete}
+                >
+                  Delete
+                </ButtonComponent>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );
