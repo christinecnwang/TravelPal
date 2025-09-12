@@ -61,26 +61,26 @@ const AllUsers = ({ loaderData }: Route.ComponentProps) => {
             headerText='Type'
             width='100'
             textAlign='Left'
-            template={(props: UserData) => (
+            template={({ status }: UserData) => (
               <article
                 className={cn(
                   "status-column",
-                  status === "user" ? "bg-success-50" : "bg-light-300"
+                  status === "user" ? "bg-success-50" : "bg-red-200"
                 )}
               >
                 <div
                   className={cn(
                     "size-1.5 rounded-full",
-                    status === "user" ? "bg-success-500" : "bg-gray-500"
+                    status === "user" ? "bg-success-500" : "bg-red-500"
                   )}
                 />
                 <h3
                   className={cn(
                     "font-inter text-xs font-medium",
-                    status === "user" ? "text-success-700" : "text-gray-500"
+                    status === "user" ? "text-success-700" : "text-red-900"
                   )}
                 >
-                  {props.status}
+                  {status}
                 </h3>
               </article>
             )}
