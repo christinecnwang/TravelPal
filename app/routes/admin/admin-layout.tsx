@@ -12,14 +12,14 @@ export async function clientLoader({ request }: { request: Request }) {
     const existingUser = await getExistingUser(user.$id);
 
     if (existingUser?.status === "user") {
-      if (url.pathname.startsWith("/trips") || (url.pathname.startsWith("/"))) {
-        return existingUser
+      if (url.pathname.startsWith("/trips") || url.pathname.startsWith("/")) {
+        return existingUser;
       }
       return redirect("/");
     }
 
     if (existingUser?.status === "admin") {
-      return existingUser
+      return existingUser;
     }
 
     if (!user.$id) return redirect("/sign-in");

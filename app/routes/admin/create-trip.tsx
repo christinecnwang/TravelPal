@@ -139,33 +139,39 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
 
   const mapData = [
     {
-      country: selectedCountry === "United States" && formData.country
-        ? "United States"
-        : formData.country,
+      country:
+        selectedCountry === "United States" && formData.country
+          ? "United States"
+          : formData.country,
       color: "#EA382E",
       coordinates:
-        countries.find((c: Country) => c.name === (selectedCountry === "United States" && formData.country ? "United States" : formData.country))
-          ?.coordinates || [],
+        countries.find(
+          (c: Country) =>
+            c.name ===
+            (selectedCountry === "United States" && formData.country
+              ? "United States"
+              : formData.country)
+        )?.coordinates || [],
     },
   ];
 
   return (
-    <main className="flex flex-col gap-10 pb-20 wrapper">
+    <main className='flex flex-col gap-10 pb-20 wrapper'>
       <Header
-        title="Add a New Trip"
-        description="View and edit AI Generated travel plans"
+        title='Add a New Trip'
+        description='View and edit AI Generated travel plans'
       />
-      <section className="mt-2.5 wrapper=md">
-        <form className="trip-form" onSubmit={handleSubmit}>
+      <section className='mt-2.5 wrapper=md'>
+        <form className='trip-form' onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="country">Country</label>
+            <label htmlFor='country'>Country</label>
             <ComboBoxComponent
-              id="country"
+              id='country'
               dataSource={countryData}
               fields={{ text: "text", value: "value" }}
-              placeholder="Select a Country"
+              placeholder='Select a Country'
               itemTemplate={countryTemplate}
-              className="combo-box"
+              className='combo-box'
               value={selectedCountry} // bind value here
               change={(e: { value: string | undefined }) => {
                 if (e.value) handleCountryChange(e.value);
@@ -191,16 +197,16 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
           {/* Render state dropdown only if USA is selected */}
           {selectedCountry === "United States" && (
             <div>
-              <label htmlFor="state">State</label>
+              <label htmlFor='state'>State</label>
               <ComboBoxComponent
-                id="state"
+                id='state'
                 dataSource={statesByCountry.USA.map((s) => ({
                   text: s.name,
                   value: s.name,
                 }))}
                 fields={{ text: "text", value: "value" }}
-                placeholder="Select a State"
-                className="combo-box"
+                placeholder='Select a State'
+                className='combo-box'
                 change={(e: { value: string | undefined }) => {
                   if (e.value) handleChange("country", e.value);
                 }}
@@ -209,12 +215,12 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
           )}
 
           <div>
-            <label htmlFor="duration"> Duration</label>
+            <label htmlFor='duration'> Duration</label>
             <input
-              id="duration"
-              name="duration"
-              placeholder="Enter a number of days (5,12 ...)"
-              className="form-input placeholder:text-gray-100"
+              id='duration'
+              name='duration'
+              placeholder='Enter a number of days (5,12 ...)'
+              className='form-input placeholder:text-gray-100'
               onChange={(e) => handleChange("duration", Number(e.target.value))}
             />
           </div>
@@ -248,45 +254,45 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
                       }))
                   );
                 }}
-                className="combo-box"
+                className='combo-box'
               />
             </div>
           ))}
 
           <div>
-            <label htmlFor="location">Location on the world map</label>
+            <label htmlFor='location'>Location on the world map</label>
             <MapsComponent>
               <LayersDirective>
                 <LayerDirective
                   shapeData={world_map}
                   dataSource={mapData}
-                  shapePropertyPath="name"
-                  shapeDataPath="country"
+                  shapePropertyPath='name'
+                  shapeDataPath='country'
                   shapeSettings={{ colorValuePath: "color", fill: "#E5E5E5" }}
                 />
               </LayersDirective>
             </MapsComponent>
           </div>
 
-          <div className="bg-gray-200 h-px w-full" />
+          <div className='bg-gray-200 h-px w-full' />
 
           {error && (
-            <div className="error">
+            <div className='error'>
               <p>{error}</p>
             </div>
           )}
 
-          <footer className="px-6 w-full">
+          <footer className='px-6 w-full'>
             <ButtonComponent
-              type="submit"
-              className="button-class !h-12 !w-full"
+              type='submit'
+              className='button-class !h-12 !w-full'
               disabled={loading}
             >
               <img
                 src={`/assets/icons/${loading ? "loader.svg" : "magic-star.svg"}`}
                 className={cn("size-5", { "animate-spin": loading })}
               />
-              <span className="p-16-semibold text-white">
+              <span className='p-16-semibold text-white'>
                 {loading ? "Generating..." : "Generate Trip"}
               </span>
             </ButtonComponent>

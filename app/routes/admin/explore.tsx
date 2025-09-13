@@ -20,6 +20,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const { allTrips, total } = await getAllTrips(PAGE_LIMIT, offset);
 
+  // Fetch and shuffle popular trips
+  const { allTrips: popularTripsData } = await getAllTrips(50, 0);
+  const popularTrips = shuffleArray(
+    popularTripsData.map(({ $id, tripDetails, imageUrls, userId }) => ({
+      id: $id,
+      ...parseTripData(tripDetails),
+      imageUrls: imageUrls ?? [],
+      userId: userId ?? "",
+    }))
+  ).slice(0, 4);
 
   return {
     allTrips: allTrips.map(({ $id, tripDetails, imageUrls, userId }) => ({
@@ -29,6 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       userId,
     })),
     total,
+    popularTrips, // Include popular trips in the loader data
   };
 };
 
@@ -37,7 +48,9 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 const Explore = () => {
-  const loaderData = useLoaderData() as TripDetailLoaderData;
+  const loaderData = useLoaderData() as TripDetailLoaderData & {
+    popularTrips: Trip[];
+  };
   const trips = loaderData.allTrips;
   const navigate = useNavigate();
 
@@ -45,42 +58,24 @@ const Explore = () => {
   const initialPage = Number(searchParams.get("page") || "1");
 
   const [currentPage, setCurrentPage] = useState(initialPage);
+  const [popularTrips, setPopularTrips] = useState<Trip[]>([]);
+
+  useEffect(() => {
+    // Check if popular trips are already in session storage. If not, generate and store them.
+    const storedPopularTrips = sessionStorage.getItem("popularTrips");
+    if (storedPopularTrips) {
+      setPopularTrips(JSON.parse(storedPopularTrips));
+    } else {
+      const shuffledTrips = shuffleArray(loaderData.popularTrips).slice(0, 4);
+      sessionStorage.setItem("popularTrips", JSON.stringify(shuffledTrips));
+      setPopularTrips(shuffledTrips);
+    }
+  }, [loaderData.popularTrips]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     navigate(`?page=${page}`, { replace: false });
   };
-
-  const [popularTrips, setPopularTrips] = useState<Trip[]>([]);
-
-  useEffect(() => {
-    async function fetchPopularTrips() {
-      try {
-        const { allTrips } = await getAllTrips(50, 0);
-
-        const parsedTrips: Trip[] = allTrips
-          .map(({ $id, tripDetails, imageUrls, userId }) => {
-            const parsed = parseTripData(tripDetails);
-            if (!parsed) return null;
-            return {
-              ...parsed,
-              id: $id,
-              imageUrls: imageUrls ?? [],
-              userId: userId ?? "",
-            };
-          })
-          .filter((t): t is Trip => t !== null);
-
-        setPopularTrips(shuffleArray(parsedTrips));
-      } catch (error) {
-        console.error("Failed to fetch popular trips:", error);
-      }
-    }
-
-    fetchPopularTrips();
-  }, []);
-
-
 
   return (
     <main className='all-users wrapper'>
@@ -125,10 +120,10 @@ const Explore = () => {
           click={(args) => handlePageChange(args.currentPage)}
           cssClass='!mb-4'
         />
-        <section className='flex flex-col gap-6 py-[30px]' >
+        <section className='flex flex-col gap-6 py-[30px]'>
           <h2 className='p-24-semibold text-dark-100'>Popular Trips</h2>
           <div className='trip-grid'>
-            {popularTrips.slice(0, 4).map(trip => (
+            {popularTrips.map((trip) => (
               <TripCard
                 key={trip.id}
                 id={trip.id}
@@ -138,8 +133,7 @@ const Explore = () => {
                 tags={[trip.interests, trip.travelStyle]}
                 price={trip.estimatedPrice}
               />
-            ))
-            }
+            ))}
           </div>
         </section>
       </section>
