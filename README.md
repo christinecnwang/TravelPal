@@ -1,87 +1,41 @@
-# Welcome to React Router!
+<div align="center">
+  <br />
+  <br />
+  <h1>🌍 TravelPal</h1>
+  <div>
+    <img alt="Static Badge" src="https://img.shields.io/badge/React-4c84f3?style=for-the-badge&logo=react&logoColor=white">
+    <img alt="Static Badge" src="https://img.shields.io/badge/Appwrite-f05695?style=for-the-badge&logo=appwrite&logoColor=white">
+    <img alt="Static Badge" src="https://img.shields.io/badge/Syncfusion-181758?style=for-the-badge&logoColor=white">
+    <img src="https://img.shields.io/badge/-Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
+  </div>
+  <br />
+</div>
 
-A modern, production-ready template for building full-stack React applications using React Router.
+## 🚀 Live Demo
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+Explore the deployed project here:  
+🔗 [View TravelPal in Action](https://your-deployed-link.com)
 
-## Features
+## <a name="introduction">🤖 Introduction</a>
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+**TravelPal** is a modern travel agency platform featuring both a public-facing site and an admin dashboard. It allows users to generate personalized, AI-powered trip itineraries based on destination, travel style, group type, interests, and budget — making trip planning effortless and intuitive.
 
-## Getting Started
 
-### Installation
+## <a name="tech-stack">⚙️ Tech Stack</a>
 
-Install the dependencies:
+- React 19 + React Router v7 (Framework Mode)
+- Appwrite (Backend & Authentication)
+- Syncfusion (UI Components & Charts)
+- Tailwind CSS
+- Vite
 
-```bash
-npm install
-```
+## <a name="features">🔋 Features</a>
 
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+- ✨ **AI-powered itinerary generator** based on user preferences  
+- 📊 **Admin dashboard** with trip and user management  
+- 📈 **User growth and trip analytics**, with interactive charts  
+- 🗂 **Trip overview** pages with key details and breakdowns  
+- 🔐 **Secure authentication** using Appwrite  
+- 📱 **Fully responsive UI** with modern, minimal design  
+- 🧱 **Modular architecture** with reusable components  
+- 🔄 Built for **scalability** and smooth UX
