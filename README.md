@@ -1,6 +1,4 @@
 <div align="center">
-  <br />
-  <br />
   <h1>🌍 TravelPal</h1>
   <div>
     <img alt="Static Badge" src="https://img.shields.io/badge/React-4c84f3?style=for-the-badge&logo=react&logoColor=white">
@@ -11,10 +9,12 @@
   <br />
 </div>
 
+<img width="1617" height="520" alt="travelpal-banner2" src="https://github.com/user-attachments/assets/6862f151-6d7f-442c-abee-af38c4fff03d" />
+
 ## 🚀 Live Demo
 
 Explore the deployed project here:  
-🔗 [View TravelPal in Action](https://your-deployed-link.com)
+🔗 [View TravelPal in Action](https://travel-pal-sandy.vercel.app/)
 
 ## <a name="introduction">🤖 Introduction</a>
 
