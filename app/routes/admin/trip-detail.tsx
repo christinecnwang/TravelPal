@@ -120,7 +120,7 @@ const TripDetail = () => {
     <main className='travel-detail wrapper'>
       <Header
         title='Trip Details'
-        description='View and edit AI-generated travel plans'
+        description='View and edit your AI-generated travel plans'
       />
       <section className='container wrapper-md'>
         <header>

@@ -159,7 +159,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
     <main className='flex flex-col gap-10 pb-20 wrapper'>
       <Header
         title='Add a New Trip'
-        description='View and edit AI Generated travel plans'
+        description='Create an AI-generated travel plan tailored to your preferences.'
       />
       <section className='mt-2.5 wrapper=md'>
         <form className='trip-form' onSubmit={handleSubmit}>
