@@ -43,7 +43,7 @@ Explore the deployed project here:
 ## <a name="admin-views">🛡️ Admin Views</a>
 
 <h3 name="admin-dashboard">Dashboard</h3>
-<img width="1939" height="1261" alt="TravelPal-dashboard" src="https://github.com/user-attachments/assets/63de473a-dd13-4ebf-8867-96bb5b74eaf9" />
+<img width="1939" height="1261" alt="TravelPal-dashboard-blurred" src="https://github.com/user-attachments/assets/8c479499-a4de-4ecc-b689-f9c56030a4b9" />
 
 <h3 name="admin-dashboard">Users</h3>
 <img width="1935" height="1258" alt="TravelPal-allusers-blurred" src="https://github.com/user-attachments/assets/ada68ddb-2126-4860-86d8-06c45adba6e7" />
